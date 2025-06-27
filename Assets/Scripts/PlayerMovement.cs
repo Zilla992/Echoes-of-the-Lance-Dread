@@ -33,18 +33,29 @@ public class PlayerMovement : MonoBehaviour
     public Vector2 wallCheckSize = new Vector2(0.5f, 0.05f);
     public LayerMask wallLayer;
 
-    [Header("WallSlide")]
+    [Header("Wallmovement")]
     public float wallSlideSpeed = 2;
     bool isWallSliding;
+    //Wall Jumping
+    bool isWallJumping;
+    float wallJumpDirection;
+    float wallJumpTime = 0.5f;
+    float wallJumpTimer;
+    public Vector2 wallJumpPower = new Vector2(2f, 10f);
 
     void FixedUpdate()
     {
-        rb.linearVelocity = new Vector2(horizontalMovement * moveSpeed, rb.linearVelocity.y);
 
         GroundCheck();
-        flip();
         ProcessGravity();
         ProcessWallSlide();
+        ProcessWallJump();
+
+        if (!isWallJumping)
+        {
+            rb.linearVelocity = new Vector2(horizontalMovement * moveSpeed, rb.linearVelocity.y);
+            flip();
+        }
     }
 
     public void Move(InputAction.CallbackContext context)
@@ -63,6 +74,24 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
         }
+
+        //Wall Jump
+        if (context.performed && wallJumpTimer > 0f)
+        {
+            isWallJumping = true;
+            rb.linearVelocity = new Vector2(wallJumpDirection * wallJumpPower.x, wallJumpPower.y);
+            wallJumpTimer = 0;
+
+            if (transform.localScale.x != wallJumpDirection)
+            {
+                isFacingRight = !isFacingRight;
+                Vector3 ls = transform.localScale;
+                ls.x *= -1f;
+                transform.localScale = ls;
+            }
+
+            Invoke(nameof(CancelWallJump), wallJumpTime + 0.1f);
+        }
     }
 
     private void GroundCheck()
@@ -76,7 +105,6 @@ public class PlayerMovement : MonoBehaviour
         {
             isGrounded = false;
         }
-        Debug.Log("Grounded: " + isGrounded);
     }
 
     private bool WallCheck()
@@ -112,6 +140,27 @@ public class PlayerMovement : MonoBehaviour
         {
             isWallSliding = false;
         }
+    }
+
+    private void ProcessWallJump()
+    {
+        if (isWallSliding)
+        {
+            isWallJumping = false;
+            wallJumpDirection = -transform.localScale.x;
+            wallJumpTimer = wallJumpTime;
+
+            CancelInvoke(nameof(CancelWallJump));
+        }
+        else if (wallJumpTimer > 0f)
+        {
+            wallJumpTimer -= Time.deltaTime;
+        }
+    }
+
+    private void CancelWallJump()
+    {
+        isWallJumping = false;
     }
 
     private void flip()

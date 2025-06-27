@@ -363,7 +363,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 515753641}
   moveSpeed: 5
-  jumpPower: 10
+  jumpPower: 15.5
   maxJumps: 1
   groundCheckPos: {fileID: 75975119}
   groundCheckSize: {x: 0.85, y: 0.05}
@@ -379,6 +379,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   wallSlideSpeed: 2
+  wallJumpPower: {x: 2, y: 10}
 --- !u!114 &515753646
 MonoBehaviour:
   m_ObjectHideFlags: 0
