@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody2D rb;
     public Animator animator;
     bool isFacingRight = true;
+    public ParticleSystem smokeFX;
 
     [Header("Movement")]
     public float moveSpeed = 5f;
@@ -78,12 +79,12 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
             jumpsRemaining--;
-            animator.SetTrigger("jump");
+            jumpFX();
         }
         else if (context.canceled)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
-            animator.SetTrigger("jump");
+            jumpFX();
         }
 
         //Wall Jump
@@ -103,6 +104,12 @@ public class PlayerMovement : MonoBehaviour
 
             Invoke(nameof(CancelWallJump), wallJumpTime + 0.1f);
         }
+    }
+
+    private void jumpFX()
+    {
+        animator.SetTrigger("jump");
+        smokeFX.Play();
     }
 
     private void GroundCheck()
@@ -182,6 +189,11 @@ public class PlayerMovement : MonoBehaviour
             Vector3 ls = transform.localScale;
             ls.x *= -1f;
             transform.localScale = ls;
+
+            if (rb.linearVelocity.y == 0)
+            {
+                smokeFX.Play();
+            }
         }
     }
 
