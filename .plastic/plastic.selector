@@ -1,0 +1,4 @@
+repository "Echoes of the Lance Dread/Echoes of the Lance Dread@2475846189112@cloud"
+  path "/"
+    br "/main"
+    co "/main"
