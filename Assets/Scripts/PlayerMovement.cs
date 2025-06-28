@@ -173,6 +173,10 @@ public class PlayerMovement : MonoBehaviour
         else if (wallJumpTimer > 0f)
         {
             wallJumpTimer -= Time.deltaTime;
+            if (wallJumpTimer <= 0f && isWallJumping)
+            {
+                CancelWallJump();
+            }
         }
     }
 
