@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -8,6 +9,8 @@ public class PlayerHealth : MonoBehaviour
 
     public HealthManager healthUI;
     private SpriteRenderer spriteRenderer;
+
+    public static event Action OnPlayerDied;
 
     void Start()
     {
@@ -36,7 +39,7 @@ public class PlayerHealth : MonoBehaviour
         StartCoroutine(FlashRed());
         if (currentHealth <= 0)
         {
-            //
+            OnPlayerDied.Invoke();
         }
     }
 

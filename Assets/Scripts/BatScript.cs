@@ -1,3 +1,5 @@
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BatEnemy : MonoBehaviour
@@ -7,6 +9,10 @@ public class BatEnemy : MonoBehaviour
     public Transform player;
 
     public int damage = 4;
+    public int maxHealth = 12;
+    private int currentHealth;
+    private SpriteRenderer spriteRenderer;
+    private Color ogcolor;  
 
     private Vector3 startPosition;
     public Animator animator;
@@ -20,6 +26,9 @@ public class BatEnemy : MonoBehaviour
         {
             player = GameObject.FindGameObjectWithTag("Player")?.transform;
         }
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        currentHealth = maxHealth;
+        ogcolor = spriteRenderer.color;
     }
 
     void Update()
@@ -51,8 +60,23 @@ public class BatEnemy : MonoBehaviour
 
     void Die()
     {
-        var rb = GetComponent<Rigidbody2D>();
-        rb.bodyType = RigidbodyType2D.Dynamic;
-        rb.gravityScale = 1f;
+        Destroy(gameObject);
+    }
+
+    public void takeDamage(int damage)
+    {
+        currentHealth -= damage;
+        StartCoroutine(FlashWhite());
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    private IEnumerator FlashWhite()
+    {
+        spriteRenderer.color = Color.white;
+        yield return new WaitForSeconds(0.2f);
+        spriteRenderer.color = ogcolor;
     }
 }

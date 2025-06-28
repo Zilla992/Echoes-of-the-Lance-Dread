@@ -4,14 +4,33 @@ using UnityEngine.UI;
 public class GameController : MonoBehaviour
 {
 
-    public Slider healthBar;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public GameObject player;
+
+    public GameObject gameOverScreen;
+
+    public Transform spawnPoint;
+
+
     void Start()
     {
-        healthBar.value = 100;
+        PlayerHealth.OnPlayerDied += GameOverScreen;
+        gameOverScreen.SetActive(false);
     }
 
-    // Update is called once per frame
+    public void resetGame()
+    {
+        gameOverScreen.SetActive(false);
+        player.transform.position = spawnPoint.position;
+
+        Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
+        rb.linearVelocity = Vector2.zero;
+    }
+
+    void GameOverScreen()
+    {
+        gameOverScreen.SetActive(true);
+    }
+
     void Update()
     {
         

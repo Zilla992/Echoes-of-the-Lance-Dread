@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
 {
     public Rigidbody2D rb;
     public Animator animator;
-    bool isFacingRight = true;
+    public bool isFacingRight = true;
     public ParticleSystem smokeFX;
 
     [Header("Movement")]
