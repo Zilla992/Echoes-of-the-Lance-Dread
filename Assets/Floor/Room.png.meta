@@ -103,9 +103,9 @@ TextureImporter:
       name: Room_0
       rect:
         serializedVersion: 2
-        x: 51
+        x: 70
         y: 164
-        width: 790
+        width: 771
         height: 508
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
